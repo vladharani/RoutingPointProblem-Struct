@@ -6,14 +6,13 @@ namespace RoutingPointProblem
     [TestClass]
     public class RoutingCoordinatesStruct
     {
-        [TestMethod]
-        public void TestRoutingCoordinates()
+        public enum command
         {
-            point startingPoint = new point(0, 0);
-            point estimatedEndingPoint = new point(1, 1);
-            string[] commands = new string[] { "up", "right", "right", "left", "up", "down"};
-            Assert.AreEqual(estimatedEndingPoint, FindLastPoint(startingPoint, commands));
-        }
+            up,
+            down,
+            left,
+            right
+        };
 
         public struct point
         {
@@ -25,18 +24,35 @@ namespace RoutingPointProblem
                 y = p2;
             }
         }
-
-        public point FindLastPoint(point calculatedEndingPoint, string[] commands)
+        [TestMethod]
+        public void TestRoutingCoordinates()
         {
-            commands = new string[] { "up", "right", "right", "left", "up", "down"};
-            for (int index = 0; index < commands.Length; index++)
+            point startingPoint = new point(0, 0);
+            point estimatedEndingPoint = new point(1, 1);
+            command[] commandsList = new command[] { command.up, command.right };
+            Assert.AreEqual(estimatedEndingPoint, FindLastPoint(startingPoint, commandsList));
+        }
+
+        public point FindLastPoint(point calculatedEndingPoint, command[] commandsList)
+        {
+            for (int index = 0; index < commandsList.Length; index++)
             {
-                if (commands[index] == "up") { calculatedEndingPoint.y = calculatedEndingPoint.y + 1; }
-                else if (commands[index] == "down") { calculatedEndingPoint.y = calculatedEndingPoint.y - 1; }
-                else if (commands[index] == "right") { calculatedEndingPoint.x = calculatedEndingPoint.x + 1; }
-                else if (commands[index] == "left") { calculatedEndingPoint.x = calculatedEndingPoint.x - 1; }
+                switch (commandsList[index])
+                {
+                    case command.up:
+                        calculatedEndingPoint.y = calculatedEndingPoint.y + 1;
+                        break;
+                    case command.down:
+                        calculatedEndingPoint.y = calculatedEndingPoint.y - 1;
+                        break;
+                    case command.right:
+                        calculatedEndingPoint.x = calculatedEndingPoint.x + 1;
+                        break;
+                    case command.left:
+                        calculatedEndingPoint.x = calculatedEndingPoint.x - 1;
+                        break;
+                }
             }
-            
             return calculatedEndingPoint;
         }
     }
